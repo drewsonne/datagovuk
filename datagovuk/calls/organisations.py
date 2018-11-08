@@ -44,5 +44,5 @@ class FetchAllOrganisationsCall(BaseCall):
     def _fetch(self):
         call = FetchOrganisationStructureCall()
         orgs = call(self.session)
-        ids = orgs['id'].unique().tolist()
+        ids = orgs.index.tolist()
         return ids
