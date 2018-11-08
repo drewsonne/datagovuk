@@ -10,6 +10,8 @@ import datagovuk as dgu
 
 orgs = dgu.organisation_structure()
 print(orgs.head())
+```
+```
 >>>                                       highlighted                         name                                parent                        title
 >>> id
 >>> 5ea7a4ac-7455-4ab4-8296-b6b600bf9b6e        False         cranfield-university  fc87db43-996f-442b-b4b2-60f0287a9e22         Cranfield University
