@@ -1,12 +1,7 @@
 from ckanapi import RemoteCKAN
 
 from datagovuk.cache import DataCache
-# try:
-#     __IPYTHON__
-#     IPY = True
-# except NameError:
-#     IPY = False
-from datagovuk.calls.organisations import OrganisationStructureCall
+from datagovuk.calls.organisations import FetchOrganisationStructureCall
 
 
 class Api(RemoteCKAN):
@@ -32,4 +27,10 @@ class Api(RemoteCKAN):
 
 client = Api()
 
-organisation_structure = client.session_wrapper(OrganisationStructureCall())
+organisation_structure = client.session_wrapper(FetchOrganisationStructureCall())
+
+# try:
+#     __IPYTHON__
+#     IPY = True
+# except NameError:
+#     IPY = False

@@ -1,39 +1,43 @@
 from functools import reduce
 
-import pandas as pd
+import numpy as np
 
-from datagovuk.cache import cache
+from datagovuk.calls.base import BaseCall
 
 
-class OrganisationStructureCall(object):
-    def __call__(self, session):
-        def _process_org_entry(orgs, org):
-            if 'children' in org:
-                orgs = reduce(
-                    lambda orgs_n, org_n: _process_org_entry(
-                        orgs_n,
-                        {**org_n, **{'parent': org['id']}}
-                    ),
-                    org['children'],
-                    orgs
-                )
-                del org['children']
-            else:
-                org['parent'] = None
-            orgs.append(org)
-            return orgs
+class FetchOrganisationStructureCall(BaseCall):
+    indices = ['id']
+    column_types = {
+        'highlighted': 'bool',
+        'parent': 'category'
+    }
+    cache_identifier = 'organisation_structure'
+    columns = ['name', 'title', 'highlighted', 'parent']
 
-        @cache('organisation_structure')
-        def get_organisation_structure():
+    def _fetch(self):
+        return reduce(
+            self._process_org_entry,
+            self.session.action.group_tree(type='organization'),
+            []
+        )
+
+    def _process_org_entry(self, orgs, org):
+        if 'children' in org:
             orgs = reduce(
-                _process_org_entry,
-                session.action.group_tree(type='organization'),
-                []
+                lambda orgs_n, org_n: self._process_org_entry(
+                    orgs_n,
+                    {**org_n, **{'parent': org['id']}}
+                ),
+                org['children'],
+                orgs
             )
-            ids = list(set([o['id'] for o in orgs]))
-            return pd.DataFrame(orgs, index=ids)
+            del org['children']
+        else:
+            org['parent'] = np.NAN
+        orgs.append(org)
+        return orgs
 
-        orgDf = get_organisation_structure(). \
-            set_index('id')
-        orgDf['highlighted'] = orgDf['highlighted'].astype('bool')
-        return orgDf
+
+class FetchAllOrganisationsCall(BaseCall):
+    def __call__(self, *args, **kwargs):
+        pass
