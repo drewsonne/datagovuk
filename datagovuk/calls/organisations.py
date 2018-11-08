@@ -39,5 +39,10 @@ class FetchOrganisationStructureCall(BaseCall):
 
 
 class FetchAllOrganisationsCall(BaseCall):
-    def __call__(self, *args, **kwargs):
-        pass
+    cache_identifier = 'all_organisations'
+
+    def _fetch(self):
+        call = FetchOrganisationStructureCall()
+        orgs = call(self.session)
+        ids = orgs['id'].unique().tolist()
+        return ids

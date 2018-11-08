@@ -1,7 +1,7 @@
 from ckanapi import RemoteCKAN
 
 from datagovuk.cache import DataCache
-from datagovuk.calls.organisations import FetchOrganisationStructureCall
+from datagovuk.calls.organisations import FetchAllOrganisationsCall, FetchOrganisationStructureCall
 
 
 class Api(RemoteCKAN):
@@ -28,6 +28,7 @@ class Api(RemoteCKAN):
 client = Api()
 
 organisation_structure = client.session_wrapper(FetchOrganisationStructureCall())
+organisations = client.session_wrapper(FetchAllOrganisationsCall())
 
 # try:
 #     __IPYTHON__
