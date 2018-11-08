@@ -1,5 +1,8 @@
 # datagovuk
 
+Interface to provide pandas `pd.DataFrame` objects for all the interfaces and datasets
+in the data.gov.uk collection.
+
 ## quickstart
 
 ```python
