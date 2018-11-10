@@ -1,9 +1,9 @@
 # datagovuk
 
-Interface to provide pandas `pd.DataFrame` objects for all the interfaces and datasets
-in the data.gov.uk collection.
+Interface to provide pandas `pd.DataFrame` objects for all the dataset and 
+organisation metadata, and datasets themselves in the [data.gov.uk](https://data.gov.uk/) CKAN database.
 
-## quickstart
+## Quickstart
 
 ```python
 import datagovuk as dgu
@@ -20,3 +20,11 @@ print(orgs.head())
 >>> 3a9d8dc4-4f45-4d48-928a-6e3f04449dba        False    crown-prosecution-service  b5dbc6b9-f976-4b78-8bab-2ac41e78ed38    Crown Prosecution Service
 >>> 486b7bf1-77d8-4ef2-8722-eab1eaf19b2e        False  government-legal-department  b5dbc6b9-f976-4b78-8bab-2ac41e78ed38  Government Legal Department
 ```
+
+## Methods
+
+    - datagovuk.organisation_structure()
+    - datagovuk.organisations_groups()
+    - datagovuk.organisations_users()
+    - datagovuk.organisations()
+    - datagovuk.datasets

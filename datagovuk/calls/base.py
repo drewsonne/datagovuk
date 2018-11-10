@@ -28,7 +28,6 @@ class BaseCall(object):
 
             df = pd.DataFrame(
                 response,
-                columns=self.columns,
                 index=indices
             )
 

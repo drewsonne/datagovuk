@@ -15,7 +15,6 @@ class FetchOrganisationStructureCall(BaseCall):
         'highlighted': 'bool',
         'parent': 'category'
     }
-    columns = ['id', 'name', 'title', 'highlighted', 'parent']
 
     def _fetch(self):
         return reduce(
@@ -50,12 +49,11 @@ class FetchAllOrganisationsBaseCall(BaseCall):
         return self._fetch_all()[self.facet]
 
     def _fetch_all(self):
-        url = self._build_latest_metadata_url()
-        r = requests.get(url)
-        data_raw = zlib.decompress(r.content, 16 + zlib.MAX_WBITS).decode()
         users = []
         groups = []
         orgs = []
+        replaced_by = []
+        data_raw = self._fetch_data()
         for line in data_raw.splitlines():
             org = json.loads(line)
             for user in org['users']:
@@ -70,12 +68,27 @@ class FetchAllOrganisationsBaseCall(BaseCall):
                     **{'org': org['id']}
                 })
             del org['groups']
+
+            for kv in org['extras']:
+                org['extras.' + kv['key']] = kv['value']
+            del org['extras']
+
+            # These values appear to be always empty
+            # so let's clear them out, pending any
+            # future use
+            del org['replaced_by'], org['tags']
+
             orgs.append(org)
         return {
             'organisations': orgs,
             'users': users,
             'groups': groups
         }
+
+    def _fetch_data(self):
+        url = self._build_latest_metadata_url()
+        r = requests.get(url)
+        return zlib.decompress(r.content, 16 + zlib.MAX_WBITS).decode()
 
     def _build_latest_metadata_url(self, date=None):
         date_str = 'latest' if (date is None) else date.strftime("%Y-%m-%d")
@@ -88,9 +101,11 @@ class FetchAllOrganisationsCall(FetchAllOrganisationsBaseCall):
     cache_identifier = 'all_organisations'
     facet = 'organisations'
     indices = ['id']
-    columns = ['abbreviation', 'approval_status', 'category', 'contact-email', 'contact-name', 'contact-phone',
-               'description', 'extras', 'foi-email', 'foi-name', 'foi-phone', 'foi-web', 'id', 'image_display_url',
-               'image_url', 'is_organization', 'name', 'replaced_by', 'tags', 'title', 'type']
+    column_types = {
+        'extras.category': 'category',
+        'category': 'category',
+    }
+
 
 class FetchOrganisationUsersCall(FetchAllOrganisationsBaseCall):
     cache_identifier = 'all_organisations_users'
@@ -99,7 +114,7 @@ class FetchOrganisationUsersCall(FetchAllOrganisationsBaseCall):
     column_types = {
         'capacity': 'category'
     }
-    columns = ['name', 'capacity', 'org']
+
 
 class FetchOrganisationGroupsCall(FetchAllOrganisationsBaseCall):
     cache_identifier = 'all_organisations_groups'
@@ -108,4 +123,3 @@ class FetchOrganisationGroupsCall(FetchAllOrganisationsBaseCall):
     column_types = {
         'capacity': 'category'
     }
-    columns = ['name', 'capacity', 'org']

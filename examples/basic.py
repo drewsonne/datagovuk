@@ -1,6 +1,12 @@
 import datagovuk as dgu
 
-print(dgu.organisation_structure())
-print(dgu.organisations_groups())
-print(dgu.organisations_users())
-print(dgu.organisations())
+for call in [
+    dgu.organisation_structure,
+    dgu.organisations_groups,
+    dgu.organisations_users,
+    dgu.organisations,
+    dgu.datasets
+]:
+    print(call().info())
+    print(call().head())
+    print("\n\n")
