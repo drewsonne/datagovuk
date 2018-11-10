@@ -10,6 +10,20 @@ import datagovuk as dgu
 
 orgs = dgu.organisation_structure()
 print(orgs.head())
+
+rsc = dgu.resources()
+
+# Fetch a dataset from data.gov.uk
+organogram_reference = rsc[
+    (rsc.format == 'CSV') &
+    (rsc.name == 'organogram-uk-statistics-authority')
+    ].iloc[0]
+
+organogram = dgu.resource(organogram_reference)
+
+print(organogram)
+
+
 ```
 ```
 >>>                                       highlighted                         name                                parent                        title
