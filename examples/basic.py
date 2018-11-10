@@ -5,7 +5,8 @@ for call in [
     dgu.organisations_groups,
     dgu.organisations_users,
     dgu.organisations,
-    dgu.datasets
+    dgu.datasets,
+    dgu.resources
 ]:
     print(call().info())
     print(call().head())

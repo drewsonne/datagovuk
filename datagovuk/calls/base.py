@@ -19,7 +19,7 @@ class BaseCall(object):
             response = self._fetch()
 
             def indexer(i):
-                return [o[i] for o in response]
+                return [(o[i] if i in o.keys() else '') for o in response]
 
             indices = list(map(
                 indexer,
