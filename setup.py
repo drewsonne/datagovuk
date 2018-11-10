@@ -9,13 +9,14 @@ setup(
     author='Drew J. Sonne',
     author_email='drew.sonne@gmail.com',
     description='Tool to allow easy importing to data from data.gov.uk',
-    install_requires=[
-        'ckanapi', 'ruamel.yaml', 'anytree',
-        'pandas', 'pyarrow'
-    ],
+    install_requires=['ckanapi', 'pandas', 'pyarrow'],
     entry_points={
         'datagovuk.plugins.processors': [
-            'csv = datagovuk.data_processors.csv:CSVProcessor',
+            'geojson = datagovuk.data_processors.geojson:GeoJSONProcessor [gis]',
+            'csv = datagovuk.data_processors.csv:CSVProcessor'
         ]
+    },
+    extras_require={
+        'gis': ['geopandas']
     }
 )

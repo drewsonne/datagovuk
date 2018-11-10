@@ -7,7 +7,7 @@ from datagovuk.data_processors.base import PluginBase
 
 
 class CSVProcessor(PluginBase):
-    handlers = ['CSV']
+    handlers = ['csv']
 
     def _process(self, data):
         response = []

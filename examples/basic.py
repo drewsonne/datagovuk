@@ -18,4 +18,4 @@ organogram = rsc[
     (rsc.name == 'organogram-uk-statistics-authority')
     ].iloc[0]
 
-dgu.resource(organogram).head()
+print(dgu.resource(organogram).head())
