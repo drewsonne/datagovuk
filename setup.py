@@ -13,4 +13,9 @@ setup(
         'ckanapi', 'ruamel.yaml', 'anytree',
         'pandas', 'pyarrow'
     ],
+    entry_points={
+        'datagovuk.plugins.processors': [
+            'csv = datagovuk.data_processors.csv.CSVProcessor',
+        ]
+    }
 )

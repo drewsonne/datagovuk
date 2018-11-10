@@ -96,3 +96,8 @@ class FetchAllDatasetsCall(FetchAllDatasetsBaseCall):
         "Update Frequency": "update-frequency",
         "Version": "version"
     }
+
+
+class FetchDatasetCall(BaseCall):
+    def __call__(self, session):
+        pass

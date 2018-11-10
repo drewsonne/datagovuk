@@ -1,7 +1,8 @@
 from ckanapi import RemoteCKAN
 
 from datagovuk.cache import DataCache
-from datagovuk.calls.datasets import FetchAllDatasetsBaseCall, FetchAllDatasetsCall, FetchAllResourcesCall
+from datagovuk.calls.datasets import FetchAllDatasetsBaseCall, FetchAllDatasetsCall, FetchAllResourcesCall, \
+    FetchDatasetCall
 from datagovuk.calls.organisations import FetchAllOrganisationsCall, FetchOrganisationGroupsCall, \
     FetchOrganisationStructureCall, FetchOrganisationUsersCall
 
@@ -39,6 +40,7 @@ organisations = client.session_wrapper(FetchAllOrganisationsCall())
 
 resources = client.session_wrapper(FetchAllResourcesCall())
 datasets = client.session_wrapper(FetchAllDatasetsCall())
+dataset = client.session_wrapper(FetchDatasetCall())
 
 # try:
 #     __IPYTHON__
