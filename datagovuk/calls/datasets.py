@@ -6,6 +6,7 @@ import requests
 
 from datagovuk.calls.base import BaseCall
 from datagovuk.data_processors import plugins
+from datagovuk.data_processors.base import PluginCallBase
 
 
 class FetchAllDatasetsBaseCall(BaseCall):
@@ -99,12 +100,24 @@ class FetchAllDatasetsCall(FetchAllDatasetsBaseCall):
     }
 
 
-class FetchResourceCall(BaseCall):
+class FetchResourceCall(PluginCallBase):
     def _fetch(self, df, **kwargs):
-        return plugins.find_processor(
+        processor = plugins.find_processor(
             filetype=df['format'],
             resource_name=df['name']
-        ).fetch(df=df)
+        )
+
+        def handler(cache_path):
+            data = processor.deserialise(cache_path, df['id'])
+            if data is not None:
+                return data
+            data = processor.encode(
+                processor.fetch(df=df)
+            )
+            processor.serialise(data, cache_path, df['id'])
+            return data
+
+        return handler
 
     def get_cache_identifier(self, df, **kwargs):
         return 'resource_' + df['id']

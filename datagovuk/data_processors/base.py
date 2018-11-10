@@ -1,8 +1,11 @@
 import requests
 
+from datagovuk.cache import plugin_cache
+
 
 class PluginBase(object):
     handlers = []
+    extension = 'none'
 
     def __init__(self):
         self.encoder = None
@@ -18,3 +21,15 @@ class PluginBase(object):
 
     def _process(self, data):
         raise NotImplemented()
+
+    def _file_name(self, cache_dir, name):
+        return cache_dir / ('resource_' + name + '.' + self.extension)
+
+
+class PluginCallBase(object):
+    @plugin_cache()
+    def __call__(self, df, *args, **kwargs):
+        return self._fetch(df, **kwargs)
+
+    def _fetch(self, df, **kwargs):
+        raise NotImplemented

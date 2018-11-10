@@ -17,6 +17,6 @@ setup(
         ]
     },
     extras_require={
-        'gis': ['geopandas']
+        'gis': ['geopandas', 'matplotlib']
     }
 )

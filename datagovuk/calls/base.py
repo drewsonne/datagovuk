@@ -14,14 +14,14 @@ class BaseCall(object):
     def __init__(self):
         self.session = None
 
-    def __call__(self, *args, **kwargs):
+    def __call__(self, **kwargs):
         session = kwargs['session']
         del kwargs['session']
 
-        @cache(self.get_cache_identifier(*args, **kwargs))
+        @cache(self.get_cache_identifier())
         def call_hander():
             self.session = session
-            response = self._fetch(*args, **kwargs)
+            response = self._fetch(**kwargs)
 
             df_args = {}
 
@@ -49,5 +49,5 @@ class BaseCall(object):
     def _fetch(self, **kwargs):
         raise NotImplemented()
 
-    def get_cache_identifier(self, *args, **kwargs):
+    def get_cache_identifier(self):
         return hashlib.md5(self.cache_identifier.encode()).hexdigest()

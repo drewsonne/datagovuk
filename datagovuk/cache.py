@@ -21,12 +21,30 @@ class DataCache(object):
 
         def func_wrapper(func):
             def cache_handler(*args, **kwargs):
-                if cache_file.exists():
-                    df = pd.read_parquet(cache_file)
-                else:
-                    df = func(*args, **kwargs)
-                    df.to_parquet(cache_file)
-                return df
+                return self._serialise(
+                    cache_file=cache_file,
+                    callback=lambda _: func(*args, **kwargs),
+                )
+
+            return cache_handler
+
+        return func_wrapper
+
+    def _serialise(self, cache_file, callback):
+        if cache_file.exists():
+            df = pd.read_parquet(cache_file)
+        else:
+            df = callback()
+            df.to_parquet(cache_file)
+        return df
+
+
+class PluginCache(DataCache):
+    def __call__(self):
+        def func_wrapper(func):
+            def cache_handler(*args, **kwargs):
+                response = func(*args, **kwargs)
+                return response(self._path)
 
             return cache_handler
 
@@ -34,3 +52,4 @@ class DataCache(object):
 
 
 cache = DataCache()
+plugin_cache = PluginCache()

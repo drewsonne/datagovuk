@@ -2,12 +2,14 @@ import csv
 from io import StringIO
 
 import chardet
+import pandas as pd
 
 from datagovuk.data_processors.base import PluginBase
 
 
 class CSVProcessor(PluginBase):
     handlers = ['csv']
+    extension = 'parquet'
 
     def _process(self, data):
         response = []
@@ -29,3 +31,14 @@ class CSVProcessor(PluginBase):
                 continue
             response.append(dict(zip(header, row)))
         return response
+
+    def encode(self, data):
+        return pd.DataFrame(data)
+
+    def serialise(self, data, cache_dir, name):
+        data.to_parquet(self._file_name(cache_dir, name))
+
+    def deserialise(self, cache_dir, name):
+        file = self._file_name(cache_dir, name)
+        if file.exists():
+            return pd.read_parquet(file)
