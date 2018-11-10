@@ -2,7 +2,7 @@ from ckanapi import RemoteCKAN
 
 from datagovuk.cache import DataCache
 from datagovuk.calls.datasets import FetchAllDatasetsBaseCall, FetchAllDatasetsCall, FetchAllResourcesCall, \
-    FetchDatasetCall
+    FetchResourceCall
 from datagovuk.calls.organisations import FetchAllOrganisationsCall, FetchOrganisationGroupsCall, \
     FetchOrganisationStructureCall, FetchOrganisationUsersCall
 
@@ -20,10 +20,10 @@ class Api(RemoteCKAN):
             Api.DEFAULT = self
 
     def session_wrapper(self, func):
-        def default_session_handler(session=None, *args, **kwargs):
-            if session is None:
-                session = self.DEFAULT
-            return func(*args, session=session, **kwargs)
+        def default_session_handler(*args, **kwargs):
+            if 'session' not in kwargs:
+                kwargs['session'] = self.DEFAULT
+            return func(*args, **kwargs)
 
         return default_session_handler
 
@@ -40,7 +40,9 @@ organisations = client.session_wrapper(FetchAllOrganisationsCall())
 
 resources = client.session_wrapper(FetchAllResourcesCall())
 datasets = client.session_wrapper(FetchAllDatasetsCall())
-dataset = client.session_wrapper(FetchDatasetCall())
+
+# Retrieve resources
+resource = client.session_wrapper(FetchResourceCall())
 
 # try:
 #     __IPYTHON__

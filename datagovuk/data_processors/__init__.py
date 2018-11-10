@@ -4,6 +4,7 @@ import pkg_resources
 class NoProcessorAvailable(Exception): pass
 
 
+
 class PluginController(object):
     plugins = None
 
@@ -24,9 +25,9 @@ class PluginController(object):
         if self.plugins is None:
             self.plugins = {}
             for entry_point in pkg_resources.iter_entry_points('datagovuk.plugins.processors'):
-                plugin = entry_point.load()
+                plugin = entry_point.load()()
                 for handler in plugin.handlers:
-                    self.plugins[handler] = entry_point.load()
+                    self.plugins[handler] = plugin
 
 
 plugins = PluginController()

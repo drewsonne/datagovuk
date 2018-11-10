@@ -15,7 +15,7 @@ setup(
     ],
     entry_points={
         'datagovuk.plugins.processors': [
-            'csv = datagovuk.data_processors.csv.CSVProcessor',
+            'csv = datagovuk.data_processors.csv:CSVProcessor',
         ]
     }
 )

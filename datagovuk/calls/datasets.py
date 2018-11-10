@@ -5,6 +5,7 @@ from io import BytesIO, StringIO
 import requests
 
 from datagovuk.calls.base import BaseCall
+from datagovuk.data_processors import plugins
 
 
 class FetchAllDatasetsBaseCall(BaseCall):
@@ -48,7 +49,7 @@ class FetchAllDatasetsBaseCall(BaseCall):
 class FetchAllResourcesCall(FetchAllDatasetsBaseCall):
     cache_identifier = 'resources'
     facet = 'resources'
-    indices = ['id', 'name']
+    indices = ['name', 'date']
     column_mapping = {
         'Dataset Name': 'name',
         'URL': 'url',
@@ -98,6 +99,12 @@ class FetchAllDatasetsCall(FetchAllDatasetsBaseCall):
     }
 
 
-class FetchDatasetCall(BaseCall):
-    def __call__(self, session):
-        pass
+class FetchResourceCall(BaseCall):
+    def _fetch(self, df, **kwargs):
+        return plugins.find_processor(
+            filetype=df['format'],
+            resource_name=df['name']
+        ).fetch(df=df)
+
+    def get_cache_identifier(self, df, **kwargs):
+        return 'resource_' + df['id']

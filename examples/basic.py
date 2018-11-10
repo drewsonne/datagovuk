@@ -12,9 +12,10 @@ for call in [
     print(call().head())
     print("\n\n")
 
+rsc = dgu.resources()
+organogram = rsc[
+    (rsc.format == 'CSV') &
+    (rsc.name == 'organogram-uk-statistics-authority')
+    ].iloc[0]
 
-ds = dgu.datasets()
-
-
-
-dgu.dataset()
+dgu.resource(organogram).head()

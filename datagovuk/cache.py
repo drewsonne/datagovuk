@@ -1,4 +1,3 @@
-import hashlib
 import os
 from pathlib import Path
 
@@ -18,7 +17,7 @@ class DataCache(object):
             self._path.mkdir(exist_ok=True)
 
     def __call__(self, identifier):
-        cache_file = self._path / (hashlib.md5(identifier.encode()).hexdigest() + '.parquet')
+        cache_file = self._path / (identifier + '.parquet')
 
         def func_wrapper(func):
             def cache_handler(*args, **kwargs):
@@ -32,5 +31,6 @@ class DataCache(object):
             return cache_handler
 
         return func_wrapper
+
 
 cache = DataCache()
