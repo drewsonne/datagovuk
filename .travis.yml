@@ -4,6 +4,12 @@ python:
   - "3.6-dev"  # 3.6 development branch
   - "3.7-dev"  # 3.7 development branch
 
+install:
+  - pip install -e .
+
+script:
+  - make build
+
 deploy:
   provider: pypi
   user: "drewsonne"
