@@ -7,7 +7,7 @@ from datagovuk.data_processors.base import PluginBase
 
 class GeoJSONProcessor(PluginBase):
     handlers = ['geojson']
-    extension = 'shp'
+    extension = 'geojson'
 
     def _process(self, data):
         with tempfile.NamedTemporaryFile() as tmp:
@@ -23,7 +23,7 @@ class GeoJSONProcessor(PluginBase):
 
     def serialise(self, data, cache_dir, name):
         data.to_file(
-            driver='ESRI Shapefile',
+            driver='GeoJSON',
             filename=self._file_name(cache_dir, name)
         )
 

@@ -1,0 +1,8 @@
+deploy:
+  provider: pypi
+  user: "drewsonne"
+  password: "Your password"
+  distributions: "sdist bdist_wheel" # Your distributions here
+  skip_cleanup: true
+  on:
+    tags: true
