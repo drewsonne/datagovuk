@@ -23,7 +23,7 @@ class DataCache(object):
             def cache_handler(*args, **kwargs):
                 return self._serialise(
                     cache_file=cache_file,
-                    callback=lambda _: func(*args, **kwargs),
+                    callback=lambda _=None: func(*args, **kwargs),
                 )
 
             return cache_handler
@@ -34,7 +34,7 @@ class DataCache(object):
         if cache_file.exists():
             df = pd.read_parquet(cache_file)
         else:
-            df = callback()
+            df = callback(None)
             df.to_parquet(cache_file)
         return df
 
