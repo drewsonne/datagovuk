@@ -23,7 +23,7 @@ class FetchAllDatasetsBaseCall(BaseCall):
         r = requests.get(url)
         response = []
         with zipfile.ZipFile(
-            BytesIO(r.content)
+                BytesIO(r.content)
         ).open(facet + '.csv') as fp:
             csvfile = StringIO(fp.read().decode('utf-8'))
             sample = csvfile.read(1024)
@@ -37,7 +37,11 @@ class FetchAllDatasetsBaseCall(BaseCall):
                 if skip_first:
                     skip_first = False
                     continue
-                response.append(dict(zip(self.column_mapping.values(), row)))
+                dict_row = dict(zip(self.column_mapping.values(), row))
+                if 'tags' in dict_row:
+                    dict_row['tags'] = list(filter(None, dict_row['tags'].split(',')))
+
+                response.append(dict_row)
             return response
 
     def _build_latest_metadata_url(self, date=None):

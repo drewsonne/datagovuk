@@ -8,7 +8,7 @@ from datagovuk.data_processors.base import PluginBase
 
 
 class CSVProcessor(PluginBase):
-    handlers = ['csv']
+    handlers = ['csv','.CSV']
     extension = 'parquet'
 
     def _process(self, data):

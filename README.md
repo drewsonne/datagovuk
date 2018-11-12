@@ -3,7 +3,13 @@
 Interface to provide pandas `pd.DataFrame` objects for all the dataset and 
 organisation metadata, and datasets themselves in the [data.gov.uk](https://data.gov.uk/) CKAN database.
 
+The main goal here, is to reduce the barrier of entry to exploring the data.gov.uk datasets. 
+The collection contains many web
+
 ## Quickstart
+
+This can be run as a normal python script, but for the best experience, it is recommended to 
+run this in `ipython` or some sort of interactive console so that data can be inspected ad-hoc.
 
 ```python
 import datagovuk as dgu
@@ -41,4 +47,13 @@ print(organogram)
     - datagovuk.organisations_groups()
     - datagovuk.organisations_users()
     - datagovuk.organisations()
-    - datagovuk.datasets
+    - datagovuk.datasets()
+    - datagovuk.resources()
+    - datagovuk.resource(df: pd.DataFrame) # 
+
+## Contributing
+
+Using the `datagocuk.resource(...)` method requires a handler to be written to comprehend the dataset being imported.
+`datagovuk` uses a 
+
+
